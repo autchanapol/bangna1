@@ -128,7 +128,7 @@ const Login = ({ onLogin }) => {
                   block
                   onClick={handleLogin}
                 >
-                  Login
+                  Login.
                 </Button>
               </Form>
             </CardBody>
