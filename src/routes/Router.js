@@ -18,6 +18,7 @@ const Forms = lazy(() => import("../views/ui/Forms"));
 const Login = lazy(() => import("../views/ui/Login"));
 const MyAccout = lazy(() => import("../views/ui/MyAccout"));
 const Breadcrumbs = lazy(() => import("../views/ui/Breadcrumbs"));
+const Addbed = lazy(() => import("../views/ui/Addbed.js"))
 
 /***** Logout Component *****/
 const Logout = ({ setIsAuthenticated }) => {
@@ -46,6 +47,7 @@ const ThemeRoutes = (isAuthenticated, setIsAuthenticated) => [
       { path: "forms", element: <Forms /> },
       { path: "myAccout", element: <MyAccout /> },
       { path: "breadcrumbs", element: <Breadcrumbs /> },
+      { path: "addbed", element: <Addbed /> },
     ],
   },
   {

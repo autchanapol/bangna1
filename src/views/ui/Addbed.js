@@ -2,7 +2,10 @@ import React from 'react'
 
 function Addbed() {
   return (
-    <div>Addbed</div>
+    <>
+    <h1> Addbed</h1>
+   
+    </>
   )
 }
 

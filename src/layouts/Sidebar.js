@@ -55,6 +55,11 @@ const navigation = [
     href: "/about",
     icon: "bi bi-people",
   },
+  {
+    title: "Addbed",
+    href: "/adbed",
+    icon: "bi bi-people",
+  },
 ];
 
 const Sidebar = () => {
