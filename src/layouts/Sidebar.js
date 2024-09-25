@@ -57,9 +57,10 @@ const navigation = [
   },
   {
     title: "Addbed",
-    href: "/adbed",
+    href: "/addbed",
     icon: "bi bi-people",
   },
+
 ];
 
 const Sidebar = () => {

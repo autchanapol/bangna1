@@ -48,6 +48,7 @@ const ThemeRoutes = (isAuthenticated, setIsAuthenticated) => [
       { path: "myAccout", element: <MyAccout /> },
       { path: "breadcrumbs", element: <Breadcrumbs /> },
       { path: "addbed", element: <Addbed /> },
+    
     ],
   },
   {
