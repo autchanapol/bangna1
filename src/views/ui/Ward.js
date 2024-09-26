@@ -16,40 +16,53 @@ import {
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 
-function Addbed() {
-  // สร้างสไตล์สำหรับการจัดตำแหน่ง Modal ให้แสดงกลางหน้าจอ
-  const CenteredModal = styled.div`
-    .modal-dialog {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh; /* ให้ Modal อยู่กลางหน้าจอ */
-    }
-  `;
+// สร้างสไตล์สำหรับการจัดตำแหน่ง Modal ให้แสดงกลางหน้าจอ
+const CenteredModal = styled.div`
+  .modal-dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* ให้ Modal อยู่กลางหน้าจอ */
+  }
+`;
 
+const Ward = () => {
   const [modal, setModal] = useState(false); // สำหรับควบคุมการเปิด/ปิด Modal
   const toggleModal = () => setModal(!modal); // ฟังก์ชันเปิด/ปิด Modal
   const [headMessage, setheadMessage] = useState(""); // ข้อความแจ้งเตือนใน Modal
   const [formData, setFormData] = useState({ name: "", description: "" }); // เก็บข้อมูลฟอร์ม
 
+  const handleAdd = () => {
+    setheadMessage("เพิ่ม Ward");
+    setFormData({ name: "", description: "" }); // เคลียร์ฟอร์มสำหรับการเพิ่ม
+    setModal(true);
+  };
+
+  const handleModify = (id) => {
+    const ward = wardData.find((ward) => ward.id === id); // หา Ward ที่ต้องการแก้ไข
+    setheadMessage("แก้ไข Ward เลขที่ " + id);
+    setFormData({ name: ward.name, description: ward.description }); // ตั้งค่า formData
+    setModal(true);
+  };
+
+  const wardData = [
+    { id: 1, name: "Ward 1", description: "รายละเอียด Ward 1" },
+    { id: 2, name: "Ward 2", description: "รายละเอียด Ward 2" },
+    { id: 3, name: "Ward 3", description: "รายละเอียด Ward 3" },
+    { id: 4, name: "Ward 4", description: "รายละเอียด Ward 4" },
+    { id: 5, name: "Ward 5", description: "รายละเอียด Ward 5" },
+    { id: 6, name: "Ward 6", description: "รายละเอียด Ward 6" },
+    { id: 7, name: "Ward 7", description: "รายละเอียด Ward 7" },
+    { id: 8, name: "Ward 8", description: "รายละเอียด Ward 8" },
+    // เพิ่มข้อมูลตามต้องการ
+  ];
+
   const [searchTerm, setSearchTerm] = useState(""); // เก็บคีย์เวิร์ดที่ค้นหา
   const [currentPage, setCurrentPage] = useState(0); // เก็บหน้าปัจจุบัน
   const itemsPerPage = 20; // จำนวนรายการต่อหน้า
 
-
-  const bedData = [
-    { id: 1, name: "bed 1", description: "รายละเอียด bed 1" },
-    { id: 2, name: "bed 2", description: "รายละเอียด bed 2" },
-    { id: 3, name: "bed 3", description: "รายละเอียด bed 3" },
-    { id: 4, name: "bed 4", description: "รายละเอียด bed 4" },
-    { id: 5, name: "bed 5", description: "รายละเอียด bed 5" },
-    { id: 6, name: "bed 6", description: "รายละเอียด bed 6" },
-    { id: 7, name: "bed 7", description: "รายละเอียด bed 7" },
-    { id: 8, name: "bed 8", description: "รายละเอียด bed 8" },
-    // เพิ่มข้อมูลตามต้องการ
-  ];
-
-  const filteredData = bedData.filter((ward) =>
+  // ฟังก์ชันที่ใช้กรองข้อมูลจากการค้นหา
+  const filteredData = wardData.filter((ward) =>
     ward.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -63,39 +76,27 @@ function Addbed() {
     setCurrentPage(selected);
   };
 
-
-  const handleAdd = () => {
-    setheadMessage("เพิ่ม Bed");
-    setFormData({ name: "", description: "" }); // เคลียร์ฟอร์มสำหรับการเพิ่ม
-    setModal(true);
-  };
-
-  const handleModify = (id) => {
-    const bed = bedData.find((bed) => bed.id === id); // หา Ward ที่ต้องการแก้ไข
-    setheadMessage("แก้ไข Bed เลขที่ " + id);
-    setFormData({ name: bed.name, description: bed.description }); // ตั้งค่า formData
-    setModal(true);
-  };
-
-
-
   return (
-    <>
-      <h1> Bed</h1>
+    <div>
+      <h1>Ward</h1>
+      {/* ช่องค้นหาข้อมูล */}
+   
+
       <Col lg="12">
         <Button className="btn" color="success" onClick={handleAdd}>
-          เพิ่มเตียง
+          เพิ่ม Ward
         </Button>
+        
       </Col>
       <br />
       <Col lg="12">
-        <Input
-          type="text"
-          placeholder="ค้นหา เตียง..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ marginBottom: "20px", maxWidth: "300px" }}
-        />
+      <Input
+        type="text"
+        placeholder="ค้นหา Ward..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: "20px", maxWidth: "300px" }}
+      />
         <Card>
           <CardBody className="">
             <Table bordered>
@@ -108,16 +109,16 @@ function Addbed() {
                 </tr>
               </thead>
               <tbody>
-                {currentPageData.map((bed) => (
-                  <tr key={bed.id}>
-                    <th scope="row">{bed.id}</th>
-                    <td>{bed.name}</td>
-                    <td>{bed.description}</td>
+                {currentPageData.map((ward) => (
+                  <tr key={ward.id}>
+                    <th scope="row">{ward.id}</th>
+                    <td>{ward.name}</td>
+                    <td>{ward.description}</td>
                     <td>
                       <Button
                         className="btn"
                         color="primary"
-                        onClick={() => handleModify(bed.id)}
+                        onClick={() => handleModify(ward.id)}
                       >
                         แก้ไข
                       </Button>{" "}
@@ -160,11 +161,11 @@ function Addbed() {
           <ModalHeader toggle={toggleModal}>{headMessage}</ModalHeader>
           <ModalBody>
             <FormGroup>
-              <Label for="name">ชื่อ Bed</Label>
+              <Label for="name">ชื่อ Ward</Label>
               <Input
                 id="name"
                 name="name"
-                placeholder="ชื่อ Bed"
+                placeholder="ชื่อ Ward"
                 type="text"
                 value={formData.name}
                 onChange={(e) =>
@@ -177,7 +178,7 @@ function Addbed() {
               <Input
                 id="description"
                 name="description"
-                placeholder="รายละเอียด Bed"
+                placeholder="รายละเอียด Ward"
                 type="text"
                 value={formData.description}
                 onChange={(e) =>
@@ -193,8 +194,8 @@ function Addbed() {
           </ModalFooter>
         </Modal>
       </CenteredModal>
-    </>
+    </div>
   );
-}
+};
 
-export default Addbed;
+export default Ward;

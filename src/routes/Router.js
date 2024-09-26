@@ -18,7 +18,10 @@ const Forms = lazy(() => import("../views/ui/Forms"));
 const Login = lazy(() => import("../views/ui/Login"));
 const MyAccout = lazy(() => import("../views/ui/MyAccout"));
 const Breadcrumbs = lazy(() => import("../views/ui/Breadcrumbs"));
-const Addbed = lazy(() => import("../views/ui/Addbed.js"))
+const Addbed = lazy(() => import("../views/ui/Addbed.js"));
+const Ward = lazy(() => import("../views/ui/Ward.js"));
+const BedActive = lazy(() => import("../views/ui/BedActive.js"));
+const OrderFood = lazy(() => import("../views/ui/OrderFood.js"));
 
 /***** Logout Component *****/
 const Logout = ({ setIsAuthenticated }) => {
@@ -48,6 +51,9 @@ const ThemeRoutes = (isAuthenticated, setIsAuthenticated) => [
       { path: "myAccout", element: <MyAccout /> },
       { path: "breadcrumbs", element: <Breadcrumbs /> },
       { path: "addbed", element: <Addbed /> },
+      { path: "ward", element: <Ward /> },
+      { path: "bedActive", element: <BedActive /> },
+      { path: "orderFood", element: <OrderFood /> },
     
     ],
   },
