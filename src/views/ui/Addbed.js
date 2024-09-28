@@ -15,6 +15,8 @@ import {
 } from "reactstrap";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
 function Addbed() {
   // สร้างสไตล์สำหรับการจัดตำแหน่ง Modal ให้แสดงกลางหน้าจอ
@@ -35,7 +37,7 @@ function Addbed() {
   const [searchTerm, setSearchTerm] = useState(""); // เก็บคีย์เวิร์ดที่ค้นหา
   const [currentPage, setCurrentPage] = useState(0); // เก็บหน้าปัจจุบัน
   const itemsPerPage = 20; // จำนวนรายการต่อหน้า
-
+  const animatedComponents = makeAnimated();
 
   const bedData = [
     { id: 1, name: "bed 1", description: "รายละเอียด bed 1" },
@@ -47,6 +49,12 @@ function Addbed() {
     { id: 7, name: "bed 7", description: "รายละเอียด bed 7" },
     { id: 8, name: "bed 8", description: "รายละเอียด bed 8" },
     // เพิ่มข้อมูลตามต้องการ
+  ];
+
+  const colourOptions = [
+    { value: "1", label: "Ward 1" },
+    { value: "2", label: "Ward 2" },
+    { value: "3", label: "Ward 3" },
   ];
 
   const filteredData = bedData.filter((ward) =>
@@ -63,7 +71,6 @@ function Addbed() {
     setCurrentPage(selected);
   };
 
-
   const handleAdd = () => {
     setheadMessage("เพิ่ม Bed");
     setFormData({ name: "", description: "" }); // เคลียร์ฟอร์มสำหรับการเพิ่ม
@@ -77,18 +84,18 @@ function Addbed() {
     setModal(true);
   };
 
-
-
   return (
     <>
       <h1> Bed</h1>
       <Col lg="12">
+     
         <Button className="btn" color="success" onClick={handleAdd}>
           เพิ่มเตียง
         </Button>
       </Col>
       <br />
       <Col lg="12">
+      <Label for="examplePassword">ค้นหา</Label>
         <Input
           type="text"
           placeholder="ค้นหา เตียง..."
@@ -96,6 +103,27 @@ function Addbed() {
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ marginBottom: "20px", maxWidth: "300px" }}
         />
+        <Label for="examplePassword">เลือก Ward</Label>
+        <Select
+          styles={{
+            container: (provided) => ({
+              ...provided,
+              width: "500px", // กำหนดความกว้างเป็น 300px
+            }),
+            control: (provided) => ({
+              ...provided,
+              minHeight: "40px", // กำหนดความสูงเป็น 40px
+            }),
+          }}
+       
+          closeMenuOnSelect={false}
+          components={animatedComponents}
+          defaultValue={[colourOptions[4], colourOptions[5]]}
+          isMulti
+          options={colourOptions}
+        />
+        <Label/>
+        {""}
         <Card>
           <CardBody className="">
             <Table bordered>
