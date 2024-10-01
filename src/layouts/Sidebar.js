@@ -66,7 +66,7 @@ const navigation = [
     icon: "bi bi-people",
   },
   {
-    title: "BedActive",
+    title: "Bed Active",
     href: "/bedActive",
     icon: "bi bi-people",
   },
