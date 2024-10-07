@@ -36,6 +36,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 // import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import สไตล์
 
 const OrderFood = () => {
   const [open, setOpen] = React.useState(false);
@@ -64,6 +66,30 @@ const OrderFood = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSave = () => {
+
+    const confirmed = window.confirm("ต้องการบันทึกข้อมูล การสั่งอาหาร");
+    if (confirmed) {
+      setOpen(false)
+    }
+    // confirmAlert({
+    //   title: 'Confirm to delete',
+    //   message: 'Are you sure you want to delete this?',
+    //   buttons: [
+    //     {
+    //       label: 'Yes',
+    //       onClick: () => setOpen(false)
+    //     },
+    //     {
+    //       label: 'No',
+    //       onClick: () => setOpen(false)
+          
+    //     }
+    //   ]
+    // });
+    
   };
 
   const bedData = [
@@ -225,7 +251,7 @@ const OrderFood = () => {
   return (
     <>
       <div>
-        <h1> Bed Active </h1>
+        <h1> สั่งอาหารผู้ป่วยใน </h1>
         <Col lg="12">
           <Button
             className="btn "
@@ -233,7 +259,7 @@ const OrderFood = () => {
             style={{ marginRight: "10px" }}
             onClick={handleClickOpen}
           >
-            เพิ่มผู้ป่วย
+            สั่งอาหาร
           </Button>
         </Col>
         <br />
@@ -328,21 +354,11 @@ const OrderFood = () => {
             open={open}
             onClose={handleClose}
           >
-            <DialogTitle>Optional sizes</DialogTitle>
+            <DialogTitle>สั่งอาหารผู้ป่วยใน</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                You can set my maximum width and whether to adapt or not.
+                สั่งอาหาร โดยผู้ใช้จะต้องเลือก ประเภทอาหาร ให้ครบทุกเตียง และกด SAVE
               </DialogContentText>
-              {/* <Box
-                noValidate
-                component="form"
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  m: "auto",
-                  width: "fit-content",
-                }}
-              > */}
               <FormControl sx={{ mt: 2, minWidth: 120 }}></FormControl>
               <FormGroup>
                 <Label for="name">เลือก Ward</Label>
@@ -400,124 +416,13 @@ const OrderFood = () => {
               {/* </Box> */}
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>Close</Button>
+              <Button color="primary" onClick={handleSave}>SAVE</Button>
+              <Row></Row>
+              <Button color="danger" onClick={handleClose}>Close</Button>
             </DialogActions>
           </Dialog>
         </React.Fragment>
-        {/* {modal && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <button className="close-button" onClick={() => setModal(false)}>
-              X
-            </button>
-            <h2>Modal Title</h2>
-
-            <div className="modal-content">
-              <div className="form-group">
-                <label htmlFor="select-option">Select Option:</label>
-                <select id="select-option">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="input-field">Input Field:</label>
-                <input id="input-field" type="text" placeholder="Enter text" />
-              </div>
-
-              <table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>John</td>
-                    <td>50</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Jane</td>
-                    <td>60</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )} */}
       </div>
-
-      {/* Modal สำหรับแจ้งเตือน */}
-      {/* <CenteredModal style={{width:"1000px"}}>
-          <Modal style={{width:"1000px"}} isOpen={modal} toggle={toggleModal}>
-            <ModalHeader toggle={toggleModal}>{headMessage}</ModalHeader>
-            <ModalBody>
-              <FormGroup>
-                <Label for="name">เลือก Ward</Label>
-                <Select
-                  defaultValue={wardOptions[0]} // เลือกค่าเริ่มต้นเป็น Ward 1
-                  options={wardOptions} // ใช้ตัวเลือก Wards อย่างเดียว
-                />
-
-                <Button style={{ marginTop: "10px" }} color="secondary">
-                  แสดงข้อมูล
-                </Button>
-              </FormGroup>
-              <Row>
-                <Card>
-                  <CardBody>
-                    <div className="table-container">
-                      <Table bordered>
-                        <thead>
-                          <tr>
-                            <th>No.</th>
-                            <th>เลขห้อง</th>
-                            <th>ประเภทอาหาร</th>
-                            <th>หมายเหตุ</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {currentPageData.map((bed) => (
-                            <tr key={bed.id}>
-                              <th scope="row">{bed.id}</th>
-                              <td>{bed.name}</td>
-                              <td>
-                                <Select
-                                  options={foodOption} // ใช้ตัวเลือก Wards หรือปรับแต่งตามต้องการ
-                                  defaultValue={foodOption[0]} // ค่าเริ่มต้น
-                                  onChange={(selected) => console.log(selected)} // ฟังก์ชันเมื่อเลือก
-                                />
-                              </td>
-                              <td>
-                                <Input
-                                  type="text"
-                                  placeholder="กรอกข้อมูล..."
-                                  onChange={(e) => console.log(e.target.value)} // ฟังก์ชันเมื่อกรอกข้อมูล
-                                />
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    </div>
-                  </CardBody>
-                </Card>
-              </Row>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={toggleModal}>
-                OK
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </CenteredModal> */}
     </>
   );
 };
