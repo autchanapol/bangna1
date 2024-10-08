@@ -21,10 +21,10 @@ import { useReactToPrint } from "react-to-print";
 
 const CenteredModal = styled.div`
   .modal-dialog {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* ให้ Modal อยู่กลางหน้าจอ */
+
+    
+   
+    
   }
 `;
 

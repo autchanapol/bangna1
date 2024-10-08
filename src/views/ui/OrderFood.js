@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   Col,
   Table,
@@ -38,6 +40,9 @@ const OrderFood = () => {
   const [modal, setModal] = useState(false); // สำหรับควบคุมการเปิด/ปิด Modal
   const toggleModal = () => setModal(!modal); // ฟังก์ชันเปิด/ปิด Modal
   const [headMessage, setheadMessage] = useState(""); // ข้อความแจ้งเตือนใน Modal
+  const [startDate, setStartDate] = useState(new Date()); //เก็บค่าเลือกวันที่
+
+  
 
   const bedData = [
     {
@@ -166,6 +171,18 @@ const OrderFood = () => {
     setCurrentPage(selected);
   };
 
+  //printTable
+  const handlePrint = () => {
+    const printContents = document.getElementById('printable-table').outerHTML;
+    const originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); // To restore any event listeners and React state
+  };
+
+
   return (
     <>
       <div>
@@ -175,7 +192,7 @@ const OrderFood = () => {
             className="btn "
             color="success"
             style={{ marginRight: "10px" }}
-            onClick={handleAdd}
+            //onClick={handleAdd}
           >
             เพิ่มผู้ป่วย
           </Button>
@@ -200,6 +217,10 @@ const OrderFood = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ marginBottom: "20px", maxWidth: "300px" }}
           />
+          <Label for="dateSelect">เลือกวันที่</Label> 
+          <br/>
+          <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+          <br/>
           <Label for="wardSelect">เลือก Ward</Label>
           <Select
             id="wardSelect"
@@ -224,7 +245,7 @@ const OrderFood = () => {
 
           <Card>
             <CardBody>
-              <Table bordered>
+              <Table bordered id="printable-table">
                 <thead>
                   <tr>
                     <th>No.</th>
