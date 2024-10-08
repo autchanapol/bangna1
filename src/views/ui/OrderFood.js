@@ -14,25 +14,41 @@ import {
   FormGroup,
   Label,
   Input,
+  Row,
 } from "reactstrap";
+
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { useReactToPrint } from "react-to-print";
+import AsyncSelect from "react-select/async";
+import "./css/Modal.css";
 
-const CenteredModal = styled.div`
-  .modal-dialog {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* ให้ Modal อยู่กลางหน้าจอ */
-  }
-`;
+import Box from "@mui/material/Box";
+// import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+// import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import สไตล์
 
 const OrderFood = () => {
+  const [open, setOpen] = React.useState(false);
+  const [fullWidth, setFullWidth] = React.useState(true);
+  const [maxWidth, setMaxWidth] = React.useState("lg");
+
   const componentRef = useRef();
   const [searchTerm, setSearchTerm] = useState(""); // เก็บคีย์เวิร์ดที่ค้นหา
+  const [formData, setFormData] = useState({ name: "", description: "" }); // เก็บข้อมูลฟอร์ม
   const [selectedWards, setSelectedWards] = useState([]); // เก็บ ward ที่เลือกจาก Select
   const [currentPage, setCurrentPage] = useState(0); // เก็บหน้าปัจจุบัน
   const itemsPerPage = 20; // จำนวนรายการต่อหน้า
@@ -43,6 +59,43 @@ const OrderFood = () => {
   const [startDate, setStartDate] = useState(new Date()); //เก็บค่าเลือกวันที่
 
   
+
+  const [selectedOption, setSelectedOption] = useState("");
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSave = () => {
+
+    const confirmed = window.confirm("ต้องการบันทึกข้อมูล การสั่งอาหาร");
+    if (confirmed) {
+      setOpen(false)
+    }
+    // confirmAlert({
+    //   title: 'Confirm to delete',
+    //   message: 'Are you sure you want to delete this?',
+    //   buttons: [
+    //     {
+    //       label: 'Yes',
+    //       onClick: () => setOpen(false)
+    //     },
+    //     {
+    //       label: 'No',
+    //       onClick: () => setOpen(false)
+          
+    //     }
+    //   ]
+    // });
+    
+  };
 
   const bedData = [
     {
@@ -56,80 +109,104 @@ const OrderFood = () => {
       remark: "ไม่เอาไก่",
     },
     {
-      id: 2,
-      name: "bed 2",
+      id: 1,
+      name: "bed 1",
       date: "30-09-2024",
-      patient: "hn2456 bbbbbbb bbbbbbb",
+      patient: "hn1233 aaaaaaa aaaaaaa",
       rights: "ประกันสังคม",
       ward: "1",
-      food: "อาหารปกติ",
+      food: "อาหารอ่อน",
       remark: "ไม่เอาไก่",
     },
     {
-      id: 3,
-      name: "bed 3",
+      id: 1,
+      name: "bed 1",
       date: "30-09-2024",
-      patient: "hn4644 ccccccc ccccccc",
+      patient: "hn1233 aaaaaaa aaaaaaa",
       rights: "ประกันสังคม",
-      description: "",
-      ward: "2",
-      food: "อาหารปกติ",
-      remark: "",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
     },
     {
-      id: 4,
-      name: "bed 4",
+      id: 1,
+      name: "bed 1",
       date: "30-09-2024",
-      patient: "hn8768 ddddddd ddddddd",
+      patient: "hn1233 aaaaaaa aaaaaaa",
       rights: "ประกันสังคม",
-      description: "",
-      ward: "2",
-      food: "อาหารปกติ",
-      remark: "",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
     },
     {
-      id: 5,
-      name: "bed 5",
+      id: 1,
+      name: "bed 1",
       date: "30-09-2024",
-      patient: "hn0987 fffffff fffffff",
+      patient: "hn1233 aaaaaaa aaaaaaa",
       rights: "ประกันสังคม",
-      description: "",
-      ward: "3",
-      food: "อาหารปกติ",
-      remark: "",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
     },
     {
-      id: 6,
-      name: "bed 6",
+      id: 1,
+      name: "bed 1",
       date: "30-09-2024",
-      patient: "hn1345 ggggggg ggggggg",
-      rights: "เงินสด",
-      description: "",
-      ward: "3",
-      food: "อาหารปกติ",
-      remark: "",
+      patient: "hn1233 aaaaaaa aaaaaaa",
+      rights: "ประกันสังคม",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
     },
     {
-      id: 7,
-      name: "bed 7",
+      id: 1,
+      name: "bed 1",
       date: "30-09-2024",
-      patient: "hn9870 ttttttt ttttttt",
-      rights: "ประกันสุขภาพ",
-      description: "",
-      ward: "4",
-      food: "อาหารปกติ",
-      remark: "",
+      patient: "hn1233 aaaaaaa aaaaaaa",
+      rights: "ประกันสังคม",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
     },
     {
-      id: 8,
-      name: "bed 8",
+      id: 1,
+      name: "bed 1",
       date: "30-09-2024",
-      patient: "hn1001 hhhhhhh hhhhhhh",
-      rights: "เงินสด",
-      description: "",
-      ward: "4",
-      food: "อาหารปกติ",
-      remark: "",
+      patient: "hn1233 aaaaaaa aaaaaaa",
+      rights: "ประกันสังคม",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
+    },
+    {
+      id: 1,
+      name: "bed 1",
+      date: "30-09-2024",
+      patient: "hn1233 aaaaaaa aaaaaaa",
+      rights: "ประกันสังคม",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
+    },
+    {
+      id: 1,
+      name: "bed 1",
+      date: "30-09-2024",
+      patient: "hn1233 aaaaaaa aaaaaaa",
+      rights: "ประกันสังคม",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
+    },
+    {
+      id: 1,
+      name: "bed 1",
+      date: "30-09-2024",
+      patient: "hn1233 aaaaaaa aaaaaaa",
+      rights: "ประกันสังคม",
+      ward: "1",
+      food: "อาหารอ่อน",
+      remark: "ไม่เอาไก่",
     },
     // เพิ่มข้อมูลตามต้องการ
   ];
@@ -141,12 +218,11 @@ const OrderFood = () => {
     { value: "4", label: "Ward 4" },
   ];
 
-  const foodData = [
-    { id: 1, name: "อาหารปกติ" },
-    { id: 2, name: "อาหารอ่อน" },
-    { id: 3, name: "อาหารเหลว" },
-    { id: 4, name: "งดอาหาร" },
-
+  const foodOption = [
+    { value: 1, label: "อาหารปกติ" },
+    { value: 2, label: "อาหารอ่อน" },
+    { value: 3, label: "อาหารเหลว" },
+    { value: 4, label: "งดอาหาร" },
     // เพิ่มข้อมูลตามต้องการ
   ];
 
@@ -165,6 +241,12 @@ const OrderFood = () => {
   const pageCount = Math.ceil(filteredData.length / itemsPerPage);
   const offset = currentPage * itemsPerPage;
   const currentPageData = filteredData.slice(offset, offset + itemsPerPage); // ใช้ข้อมูลหลังการแบ่งหน้า
+
+  const handleAdd = () => {
+    setheadMessage("เพิ่ม Bed");
+    setFormData({ name: "", description: "" }); // เคลียร์ฟอร์มสำหรับการเพิ่ม
+    setModal(true);
+  };
 
   // ฟังก์ชันสำหรับการเปลี่ยนหน้า
   const handlePageClick = ({ selected }) => {
@@ -186,7 +268,7 @@ const OrderFood = () => {
   return (
     <>
       <div>
-        <h1> Bed Active </h1>
+        <h1> สั่งอาหารผู้ป่วยใน </h1>
         <Col lg="12">
           <Button
             className="btn "
@@ -194,16 +276,7 @@ const OrderFood = () => {
             style={{ marginRight: "10px" }}
             //onClick={handleAdd}
           >
-            เพิ่มผู้ป่วย
-          </Button>
-          <label> </label>
-          <Button
-            className="btn "
-            color="info"
-            style={{ border: "10px" }}
-            onClick={handlePrint}
-          >
-            พิมพ์หรือสร้าง PDF
+            สั่งอาหาร
           </Button>
         </Col>
         <br />
@@ -241,8 +314,6 @@ const OrderFood = () => {
             onChange={(selected) => setSelectedWards(selected || [])} // อัปเดตค่า ward ที่เลือก
           />
           <br />
-          {/* Ref ที่ใช้สำหรับพิมพ์ */}
-
           <Card>
             <CardBody>
               <Table bordered id="printable-table">
@@ -252,7 +323,8 @@ const OrderFood = () => {
                     <th>เลขห้อง</th>
                     <th>ชื่อผู้ป่วย</th>
                     <th>สิทธิ</th>
-                    <th>วันที่เข้า</th>
+                    <th>วันที่</th>
+                    <th>ประเภทอาหาร</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -264,12 +336,10 @@ const OrderFood = () => {
                       <td>{bed.patient}</td>
                       <td>{bed.rights}</td>
                       <td>{bed.date}</td>
+                      <td>{bed.food}</td>
                       <td>
-                        {/* <Button className="btn" color="primary">
-                          แก้ไข
-                        </Button> */}{" "}
                         <Button className="btn" color="danger">
-                          Check Out !
+                          ลบ
                         </Button>
                       </td>
                     </tr>
@@ -279,7 +349,6 @@ const OrderFood = () => {
             </CardBody>
           </Card>
         </Col>
-        {/* การแบ่งหน้า */}
         <ReactPaginate
           previousLabel={"ก่อนหน้า"}
           nextLabel={"ถัดไป"}
@@ -299,6 +368,81 @@ const OrderFood = () => {
           breakClassName={"page-item"}
           breakLinkClassName={"page-link"}
         />
+        <React.Fragment>
+          <Dialog
+            fullWidth={fullWidth}
+            maxWidth={maxWidth}
+            open={open}
+            onClose={handleClose}
+          >
+            <DialogTitle>สั่งอาหารผู้ป่วยใน</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                สั่งอาหาร โดยผู้ใช้จะต้องเลือก ประเภทอาหาร ให้ครบทุกเตียง และกด SAVE
+              </DialogContentText>
+              <FormControl sx={{ mt: 2, minWidth: 120 }}></FormControl>
+              <FormGroup>
+                <Label for="name">เลือก Ward</Label>
+                <Select
+                  defaultValue={wardOptions[0]} // เลือกค่าเริ่มต้นเป็น Ward 1
+                  options={wardOptions} // ใช้ตัวเลือก Wards อย่างเดียว
+                />
+
+                <Button style={{ marginTop: "10px" }} color="secondary">
+                  แสดงข้อมูล
+                </Button>
+              </FormGroup>
+
+              <Row>
+                <Card>
+                  <CardBody>
+                    <div className="table-container">
+                      <Table bordered>
+                        <thead>
+                          <tr>
+                            <th>No.</th>
+                            <th>เลขห้อง</th>
+                            <th>ประเภทอาหาร</th>
+                            <th>หมายเหตุ</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentPageData.map((bed) => (
+                            <tr key={bed.id}>
+                              <th scope="row">{bed.id}</th>
+                              <td>{bed.name}</td>
+                              <td>
+                                <Select
+                                  options={foodOption} // ใช้ตัวเลือก Wards หรือปรับแต่งตามต้องการ
+                                  defaultValue={foodOption[0]} // ค่าเริ่มต้น
+                                  onChange={(selected) => console.log(selected)} // ฟังก์ชันเมื่อเลือก
+                                />
+                              </td>
+                              <td>
+                                <Input
+                                  type="text"
+                                  placeholder="กรอกข้อมูล..."
+                                  onChange={(e) => console.log(e.target.value)} // ฟังก์ชันเมื่อกรอกข้อมูล
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Row>
+
+              {/* </Box> */}
+            </DialogContent>
+            <DialogActions>
+              <Button color="primary" onClick={handleSave}>SAVE</Button>
+              <Row></Row>
+              <Button color="danger" onClick={handleClose}>Close</Button>
+            </DialogActions>
+          </Dialog>
+        </React.Fragment>
       </div>
     </>
   );
