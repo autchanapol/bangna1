@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import {
   Col,
   Table,
@@ -15,6 +15,7 @@ import {
 } from "reactstrap";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
+import { getWard } from "../../services/services";
 
 // สร้างสไตล์สำหรับการจัดตำแหน่ง Modal ให้แสดงกลางหน้าจอ
 const CenteredModal = styled.div`
@@ -26,11 +27,21 @@ const CenteredModal = styled.div`
   }
 `;
 
+
 const Ward = () => {
   const [modal, setModal] = useState(false); // สำหรับควบคุมการเปิด/ปิด Modal
+  const [wardData, setWardData] = useState([]); // สร้าง state สำหรับเก็บข้อมูลที่ได้จาก API
+  const [loading, setLoading] = useState(true); // สถานะสำหรับการโหลดข้อมูล
+  const [error, setError] = useState(null); // สถานะสำหรับจัดการข้อผิดพลาด
   const toggleModal = () => setModal(!modal); // ฟังก์ชันเปิด/ปิด Modal
   const [headMessage, setheadMessage] = useState(""); // ข้อความแจ้งเตือนใน Modal
   const [formData, setFormData] = useState({ name: "", description: "" }); // เก็บข้อมูลฟอร์ม
+
+
+  useEffect(() => {
+    fetchWardData(); // เรียกฟังก์ชันเพื่อดึงข้อมูล
+
+  }, []); 
 
   const handleAdd = () => {
     setheadMessage("เพิ่ม Ward");
@@ -41,21 +52,35 @@ const Ward = () => {
   const handleModify = (id) => {
     const ward = wardData.find((ward) => ward.id === id); // หา Ward ที่ต้องการแก้ไข
     setheadMessage("แก้ไข Ward เลขที่ " + id);
-    setFormData({ name: ward.name, description: ward.description }); // ตั้งค่า formData
+    setFormData({ name: ward.wardName, description: ward.remarks }); // ตั้งค่า formData
     setModal(true);
   };
 
-  const wardData = [
-    { id: 1, name: "Ward 1", description: "รายละเอียด Ward 1" },
-    { id: 2, name: "Ward 2", description: "รายละเอียด Ward 2" },
-    { id: 3, name: "Ward 3", description: "รายละเอียด Ward 3" },
-    { id: 4, name: "Ward 4", description: "รายละเอียด Ward 4" },
-    { id: 5, name: "Ward 5", description: "รายละเอียด Ward 5" },
-    { id: 6, name: "Ward 6", description: "รายละเอียด Ward 6" },
-    { id: 7, name: "Ward 7", description: "รายละเอียด Ward 7" },
-    { id: 8, name: "Ward 8", description: "รายละเอียด Ward 8" },
-    // เพิ่มข้อมูลตามต้องการ
-  ];
+  
+    const fetchWardData = async () => {
+      try {
+        const res = await getWard(); // เรียกใช้ API จาก services.js
+        console.log("api res", res.data); // res.data คือข้อมูลที่ได้จาก server
+        setWardData(res.data); // เก็บข้อมูล response จาก API ลงใน state
+      } catch (error) {
+        setError(error); // ถ้ามีข้อผิดพลาดให้เก็บไว้ใน error state
+      } finally {
+        setLoading(false); // หยุดการโหลดข้อมูล
+      }
+    }
+  
+
+  //  wardData = [
+  //   { id: 1, name: "Ward 1", description: "รายละเอียด Ward 1" },
+  //   { id: 2, name: "Ward 2", description: "รายละเอียด Ward 2" },
+  //   { id: 3, name: "Ward 3", description: "รายละเอียด Ward 3" },
+  //   { id: 4, name: "Ward 4", description: "รายละเอียด Ward 4" },
+  //   { id: 5, name: "Ward 5", description: "รายละเอียด Ward 5" },
+  //   { id: 6, name: "Ward 6", description: "รายละเอียด Ward 6" },
+  //   { id: 7, name: "Ward 7", description: "รายละเอียด Ward 7" },
+  //   { id: 8, name: "Ward 8", description: "รายละเอียด Ward 8" },
+  //   // เพิ่มข้อมูลตามต้องการ
+  // ];
 
   const [searchTerm, setSearchTerm] = useState(""); // เก็บคีย์เวิร์ดที่ค้นหา
   const [currentPage, setCurrentPage] = useState(0); // เก็บหน้าปัจจุบัน
@@ -63,7 +88,7 @@ const Ward = () => {
 
   // ฟังก์ชันที่ใช้กรองข้อมูลจากการค้นหา
   const filteredData = wardData.filter((ward) =>
-    ward.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ward.wardName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // คำนวณข้อมูลสำหรับการแบ่งหน้า
@@ -112,8 +137,8 @@ const Ward = () => {
                 {currentPageData.map((ward) => (
                   <tr key={ward.id}>
                     <th scope="row">{ward.id}</th>
-                    <td>{ward.name}</td>
-                    <td>{ward.description}</td>
+                    <td>{ward.wardName}</td>
+                    <td>{ward.remarks}</td>
                     <td>
                       <Button
                         className="btn"

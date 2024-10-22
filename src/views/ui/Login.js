@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../services/services";
 import {
   Card,
   Row,
@@ -19,18 +20,16 @@ import {
 } from "reactstrap";
 
 const Login = ({ onLogin }) => {
-
-
   const toggleModal = () => setModal(!modal); // ฟังก์ชันเปิด/ปิด Modal
   const [state, setState] = useState({
     username: "",
     password: "",
   });
+  const [loginMessage, setLoginMessage] = useState("");
 
   const [modal, setModal] = useState(false); // สำหรับควบคุมการเปิด/ปิด Modal
   const [errorMessage, setErrorMessage] = useState(""); // ข้อความแจ้งเตือนใน Modal
   const navigate = useNavigate();
-
 
   useEffect(() => {
     // ตรวจสอบว่าเคยล็อกอินหรือไม่
@@ -41,7 +40,7 @@ const Login = ({ onLogin }) => {
     }
   }, [navigate]); // ลำดับการใช้งาน navigate ถูกต้องแล้ว
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const { username, password } = state;
 
     if (!username) {
@@ -53,12 +52,33 @@ const Login = ({ onLogin }) => {
       setErrorMessage("Please fill in password.");
       setModal(true);
     } else {
+      try {
+        // เรียกใช้งานฟังก์ชัน loginUser จาก services.js
+        const res = await loginUser(username, password);
+        console.log("api res", res.data); // res.data คือข้อมูลที่ได้จาก server
 
-      // สมมุติว่าการตรวจสอบข้อมูลการล็อกอินสำเร็จ
-      localStorage.setItem("username", username); // เก็บ username ไว้ใน localStorage
-
-      onLogin(); // เรียกฟังก์ชันนี้เพื่อเปลี่ยนสถานะล็อกอินใน App.js
-      navigate("/starter", { replace: true }); // เปลี่ยนเส้นทางไปหน้า Starter และใช้ replace: true เพื่อไม่ให้ย้อนกลับไปหน้า Login ได้
+        if (res && res.data) {
+          const { success, name, userId, message } = res.data;
+          if (success) {
+            localStorage.setItem("username", name); // เก็บ username ไว้ใน localStorage
+            localStorage.setItem("userId", userId);
+            onLogin(); // เรียกฟังก์ชันนี้เพื่อเปลี่ยนสถานะล็อกอินใน App.js
+            navigate("/starter", { replace: true }); // เปลี่ยนเส้นทางไปหน้า Starter
+          } else {
+            console.log(message);
+            setErrorMessage(message);
+            setModal(true);
+          }
+        } else {
+          // ถ้า res หรือ res.data ไม่มีค่า (null หรือ undefined)
+          setErrorMessage("No response from server.");
+          setModal(true);
+        }
+      } catch (error) {
+        // จัดการข้อผิดพลาด เช่นเครือข่ายหรือ server ไม่ตอบสนอง
+        console.error("Network error:", error);
+        setErrorMessage("Network error. Please try again.");
+      }
     }
   };
 
