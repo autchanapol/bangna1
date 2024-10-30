@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@blaumaus/react-alert": "^7.0.7",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.1.1",
@@ -25,6 +26,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.8.1",
     "react-to-print": "^3.0.1",
+    "react-toastify": "^10.0.6",
     "reactstrap": "^9.2.0",
     "sass": "^1.79.3",
     "styled-components": "^6.1.13",

@@ -1,4 +1,5 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
+// import { useAlert } from "react-alert";
 import {
   Col,
   Table,
@@ -12,10 +13,19 @@ import {
   FormGroup,
   Label,
   Input,
+  Alert,
 } from "reactstrap";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
-import { getWard } from "../../services/services";
+import {
+  getWard,
+  InsertWards,
+  UpdateWard,
+  UpdateWard_status,
+} from "../../services/services";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // สร้างสไตล์สำหรับการจัดตำแหน่ง Modal ให้แสดงกลางหน้าจอ
 const CenteredModal = styled.div`
@@ -27,48 +37,153 @@ const CenteredModal = styled.div`
   }
 `;
 
-
 const Ward = () => {
+  const [userId, setUserId] = useState("");
   const [modal, setModal] = useState(false); // สำหรับควบคุมการเปิด/ปิด Modal
   const [wardData, setWardData] = useState([]); // สร้าง state สำหรับเก็บข้อมูลที่ได้จาก API
   const [loading, setLoading] = useState(true); // สถานะสำหรับการโหลดข้อมูล
   const [error, setError] = useState(null); // สถานะสำหรับจัดการข้อผิดพลาด
   const toggleModal = () => setModal(!modal); // ฟังก์ชันเปิด/ปิด Modal
   const [headMessage, setheadMessage] = useState(""); // ข้อความแจ้งเตือนใน Modal
+  const [headStatus, setheadStatus] = useState(0);
+  const [id, setId] = useState("");
   const [formData, setFormData] = useState({ name: "", description: "" }); // เก็บข้อมูลฟอร์ม
 
+  ///// ALERT///////
+  // const alert = useAlert();
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  ///// ALERT///////
 
   useEffect(() => {
+    const storedUsername = localStorage.getItem("userId");
+    if (storedUsername) {
+      // ถ้าเคยล็อกอินแล้ว ให้นำผู้ใช้ไปที่หน้า starter
+      setUserId(storedUsername);
+    }
     fetchWardData(); // เรียกฟังก์ชันเพื่อดึงข้อมูล
+  }, []);
 
-  }, []); 
+  // useEffect สำหรับการเช็คการเปลี่ยนแปลงของ userId
+  useEffect(() => {
+    if (userId) {
+      console.log("userId", userId);
+    }
+  }, [userId]);
 
   const handleAdd = () => {
     setheadMessage("เพิ่ม Ward");
+    setheadStatus(1);
     setFormData({ name: "", description: "" }); // เคลียร์ฟอร์มสำหรับการเพิ่ม
     setModal(true);
   };
 
   const handleModify = (id) => {
     const ward = wardData.find((ward) => ward.id === id); // หา Ward ที่ต้องการแก้ไข
+    setId(id);
     setheadMessage("แก้ไข Ward เลขที่ " + id);
+    setheadStatus(2);
     setFormData({ name: ward.wardName, description: ward.remarks }); // ตั้งค่า formData
     setModal(true);
   };
 
-  
-    const fetchWardData = async () => {
-      try {
-        const res = await getWard(); // เรียกใช้ API จาก services.js
-        console.log("api res", res.data); // res.data คือข้อมูลที่ได้จาก server
-        setWardData(res.data); // เก็บข้อมูล response จาก API ลงใน state
-      } catch (error) {
-        setError(error); // ถ้ามีข้อผิดพลาดให้เก็บไว้ใน error state
-      } finally {
-        setLoading(false); // หยุดการโหลดข้อมูล
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?");
+
+    if (confirmed) {
+      const ward = wardData.find((ward) => ward.id === id); // หา Ward ที่ต้องการแก้ไข
+      setId(id);
+
+      const res = await UpdateWard_status(id, 0, userId);
+      console.log("api res", res.data); // res.data คือข้อมูลที่ได้จาก server
+
+      if (res && res.data) {
+        const { success, message, wardId } = res.data;
+        if (success) {
+          fetchWardData();
+          showSuccessAlert(message + " ID : " + wardId);
+        }
+      }
+    } else {
+      console.log("ยกเลิกการลบ");
+    }
+  };
+
+  const showAlert = (msg) => {
+    console.log(msg);
+    setMessage(msg); // ตั้งค่า message ที่จะใช้แสดงใน Alert
+    setVisible(true); // ทำให้ alert แสดงขึ้นมา
+    setTimeout(() => {
+      setVisible(false); // ซ่อน alert หลังจาก 2 วินาที (2000ms)
+    }, 2000);
+  };
+
+  const handleSubmit = async () => {
+    // เพิ่มฟังก์ชันที่คุณต้องการทำเมื่อกดปุ่ม OK เช่น ส่งข้อมูล
+    console.log("Submitted:", formData);
+    if (headStatus == 1) {
+      const res = await InsertWards(
+        formData.name,
+        formData.description,
+        1,
+        userId
+      );
+      console.log("api res", res.data); // res.data คือข้อมูลที่ได้จาก server
+
+      if (res && res.data) {
+        const { success, message, wardId } = res.data;
+        if (success) {
+          fetchWardData();
+          showSuccessAlert(message + " ID : " + wardId);
+        }
+      } else {
+      }
+    } else {
+      console.log(id);
+      const res = await UpdateWard(
+        id,
+        formData.name,
+        formData.description,
+        userId
+      );
+      console.log("api res", res.data); // res.data คือข้อมูลที่ได้จาก server
+      if (res && res.data) {
+        const { success, message, wardId } = res.data;
+        if (success) {
+          fetchWardData();
+          showSuccessAlert(message + " ID : " + wardId);
+        }
       }
     }
-  
+
+    // ปิด Modal หลังจากกดปุ่ม OK
+    toggleModal();
+  };
+
+  // Reusable function to show success alert
+  const showSuccessAlert = (message) => {
+    toast.success(message, {
+      position: "top-center", // ใช้ตำแหน่งกลางด้านบน
+      autoClose: 1500, // ปิดอัตโนมัติหลังจาก 2 วินาที
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+    });
+  };
+
+  const fetchWardData = async () => {
+    try {
+      const res = await getWard(); // เรียกใช้ API จาก services.js
+      console.log("api res", res.data); // res.data คือข้อมูลที่ได้จาก server
+      setWardData(res.data); // เก็บข้อมูล response จาก API ลงใน state
+    } catch (error) {
+      setError(error); // ถ้ามีข้อผิดพลาดให้เก็บไว้ใน error state
+    } finally {
+      setLoading(false); // หยุดการโหลดข้อมูล
+    }
+  };
 
   //  wardData = [
   //   { id: 1, name: "Ward 1", description: "รายละเอียด Ward 1" },
@@ -105,23 +220,21 @@ const Ward = () => {
     <div>
       <h1>Ward</h1>
       {/* ช่องค้นหาข้อมูล */}
-   
 
       <Col lg="12">
         <Button className="btn" color="success" onClick={handleAdd}>
           เพิ่ม Ward
         </Button>
-        
       </Col>
       <br />
       <Col lg="12">
-      <Input
-        type="text"
-        placeholder="ค้นหา Ward..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: "20px", maxWidth: "300px" }}
-      />
+        <Input
+          type="text"
+          placeholder="ค้นหา Ward..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ marginBottom: "20px", maxWidth: "300px" }}
+        />
         <Card>
           <CardBody className="">
             <Table bordered>
@@ -134,9 +247,12 @@ const Ward = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentPageData.map((ward) => (
+                {currentPageData.map((ward, index) => (
                   <tr key={ward.id}>
-                    <th scope="row">{ward.id}</th>
+                    <th scope="row">
+                      {index + 1 + currentPage * itemsPerPage}
+                    </th>{" "}
+                    {/* ลำดับที่ */}
                     <td>{ward.wardName}</td>
                     <td>{ward.remarks}</td>
                     <td>
@@ -147,7 +263,11 @@ const Ward = () => {
                       >
                         แก้ไข
                       </Button>{" "}
-                      <Button className="btn" color="danger">
+                      <Button
+                        className="btn"
+                        color="danger"
+                        onClick={() => handleDelete(ward.id)}
+                      >
                         ลบ
                       </Button>
                     </td>
@@ -213,12 +333,15 @@ const Ward = () => {
             </FormGroup>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={toggleModal}>
+            <Button color="primary" onClick={handleSubmit}>
               OK
             </Button>
           </ModalFooter>
         </Modal>
       </CenteredModal>
+
+      {/* ตัวจัดการแสดง Toast */}
+      <ToastContainer />
     </div>
   );
 };
