@@ -87,6 +87,29 @@ export const GetBeds = async () => {
   }
 };
 
+export const GetUc = async () => {
+  try {
+    const res = await api.get("api/Uc/GetUc", {});
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("GetBeds error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+export const GetBedsWhereWard = async (WardId) => {
+  try {
+    const res = await api.get("api/Beds/GetBedsFrmWard", {
+      params: { WardId }, // ส่งแบบนี้ในกรณีใช้ get ?WardId=5
+    });
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("GetBeds error:", error);
+
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
 export const InsertBeds = async (Name, WardId, Remarks, Status, CreatedBy) => {
   try {
     const res = await api.post("api/Beds/InsertBed", {
@@ -103,7 +126,7 @@ export const InsertBeds = async (Name, WardId, Remarks, Status, CreatedBy) => {
   }
 };
 
-export const UpdateBeds = async (Id, Name, WardId ,Remarks ,UpdateBy  ) => {
+export const UpdateBeds = async (Id, Name, WardId, Remarks, UpdateBy) => {
   try {
     const res = await api.post("api/Beds/UpdateBed", {
       Id,
@@ -119,7 +142,7 @@ export const UpdateBeds = async (Id, Name, WardId ,Remarks ,UpdateBy  ) => {
   }
 };
 
-export const UpdateBeds_status = async (Id,Status,UpdateBy  ) => {
+export const UpdateBeds_status = async (Id, Status, UpdateBy) => {
   try {
     const res = await api.post("api/Beds/UpdateBed", {
       Id,
@@ -129,6 +152,58 @@ export const UpdateBeds_status = async (Id,Status,UpdateBy  ) => {
     return res; // ส่งข้อมูล response กลับไป
   } catch (error) {
     console.error("UpdateBeds_status error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+export const GetBedActive = async () => {
+  try {
+    const res = await api.get("api/BedActives/GetBedsActive", {});
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("GetBedsActive error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+export const InsertBedActive = async (
+  BedId,
+  UdId,
+  HnName,
+  Remarks,
+  Status,
+  CreatedBy
+) => {
+  try {
+    const res = await api.post("api/BedActives/InsertBedActive", {
+      BedId,
+      UdId,
+      HnName,
+      Remarks,
+      Status,
+      CreatedBy,
+    });
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("InsertBedsActive error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+export const UpdateBedActive = async (
+  Id,
+  Status,
+  UpdateBy
+) => {
+  try {
+    const res = await api.post("api/BedActives/UpdateBedActive", {
+      Id,
+      Status,
+      UpdateBy,
+    });
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("UpdateBedsActive error:", error);
     throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
   }
 };
