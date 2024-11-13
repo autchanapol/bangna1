@@ -22,6 +22,7 @@ const Addbed = lazy(() => import("../views/ui/Addbed.js"));
 const Ward = lazy(() => import("../views/ui/Ward.js"));
 const BedActive = lazy(() => import("../views/ui/BedActive.js"));
 const OrderFood = lazy(() => import("../views/ui/OrderFood.js"));
+const Report = lazy(() => import("../views/ui/Report.js"));
 
 /***** Logout Component *****/
 const Logout = ({ setIsAuthenticated }) => {
@@ -39,7 +40,7 @@ const ThemeRoutes = (isAuthenticated, setIsAuthenticated) => [
     path: "/",
     element: isAuthenticated ? <FullLayout /> : <Navigate to="/login" />,
     children: [
-      { path: "about", element: <About /> },  // ตั้งเป็น about หรือหน้าอื่นที่ต้องการ
+      // { path: "about", element: <About /> },  // ตั้งเป็น about หรือหน้าอื่นที่ต้องการ
       { path: "starter", element: <Starter /> },
       { path: "alerts", element: <Alerts /> },
       { path: "badges", element: <Badges /> },
@@ -54,6 +55,7 @@ const ThemeRoutes = (isAuthenticated, setIsAuthenticated) => [
       { path: "ward", element: <Ward /> },
       { path: "bedActive", element: <BedActive /> },
       { path: "orderFood", element: <OrderFood /> },
+      { path: "report", element: <Report /> },
     
     ],
   },

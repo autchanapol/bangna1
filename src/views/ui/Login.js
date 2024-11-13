@@ -62,8 +62,9 @@ const Login = ({ onLogin }) => {
           if (success) {
             localStorage.setItem("username", name); // เก็บ username ไว้ใน localStorage
             localStorage.setItem("userId", userId);
-            onLogin(); // เรียกฟังก์ชันนี้เพื่อเปลี่ยนสถานะล็อกอินใน App.js
+            // เรียกฟังก์ชันนี้เพื่อเปลี่ยนสถานะล็อกอินใน App.js
             navigate("/starter", { replace: true }); // เปลี่ยนเส้นทางไปหน้า Starter
+            onLogin();
           } else {
             console.log(message);
             setErrorMessage(message);

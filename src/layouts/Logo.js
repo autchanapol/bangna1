@@ -1,9 +1,9 @@
-import { ReactComponent as LogoDark } from "../assets/images/logos/materialpro.svg";
+import { ReactComponent as LogoDark } from "../assets/images/logos/materialprowhite.svg";
 import { Link } from "react-router-dom";
 
 const Logo = () => {
   return (
-    <Link to="/">
+    <Link >
       <LogoDark />
     </Link>
   );

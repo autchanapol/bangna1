@@ -190,11 +190,7 @@ export const InsertBedActive = async (
   }
 };
 
-export const UpdateBedActive = async (
-  Id,
-  Status,
-  UpdateBy
-) => {
+export const UpdateBedActive = async (Id, Status, UpdateBy) => {
   try {
     const res = await api.post("api/BedActives/UpdateBedActive", {
       Id,
@@ -207,3 +203,88 @@ export const UpdateBedActive = async (
     throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
   }
 };
+
+export const GetBedsActivefrmDate = async (WardId, dataOrder) => {
+  try {
+    const formattedDate =
+      dataOrder instanceof Date
+        ? dataOrder.toISOString().split("T")[0] // แปลงเป็น "YYYY-MM-DD"
+        : dataOrder; // ใช้ dataOrder เดิมถ้าไม่ใช่ Date object
+
+    const res = await api.get("api/BedActives/GetBedsActivefrmDate", {
+      params: { dataOrder: formattedDate, WardId: WardId },
+    });
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("GetBedsActivefrmDate error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+export const GetOrderFoodfrmDate = async (startData, endData) => {
+  try {
+    const formattedStartData =
+      startData instanceof Date
+        ? startData.toISOString().split("T")[0] // แปลงเป็น "YYYY-MM-DD"
+        : startData; // ใช้ dataOrder เดิมถ้าไม่ใช่ Date object
+
+    const formattedEndData =
+      endData instanceof Date
+        ? endData.toISOString().split("T")[0] // แปลงเป็น "YYYY-MM-DD"
+        : endData; // ใช้ dataOrder เดิมถ้าไม่ใช่ Date object
+
+    // แสดงพารามิเตอร์ใน console ก่อนที่จะส่งคำขอ
+    console.log("Params:", {
+      startData: formattedStartData,
+      endData: formattedEndData,
+    });
+
+    const res = await api.get("api/OrderFoods/GetOrderFoodfrmDate", {
+      params: { startData: formattedStartData, endData: formattedEndData },
+    });
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("GetBedsActivefrmDate error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+export const GetFoods = async () => {
+  try {
+    const res = await api.get("api/Foods/GetFoods", {});
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("GetFoods error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+export const AddOrderFoods = async (jsonData) => {
+  try {
+    const res = await api.post("api/OrderFoods/AddOrderFood", jsonData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("AddOrderFoods error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+export const UpdateOrderFood = async (Id, Status, UpdateBy) => {
+  try {
+    const res = await api.post("api/OrderFoods/UpdateOrderFood", {
+      Id,
+      Status,
+      UpdateBy,
+    });
+    return res; // ส่งข้อมูล response กลับไป
+  } catch (error) {
+    console.error("UpdateOrderFood error:", error);
+    throw error; // ส่งข้อผิดพลาดออกไปเพื่อจัดการต่อ
+  }
+};
+
+//params: { WardId }, // ส่งแบบนี้ในกรณีใช้ get ?WardId=5

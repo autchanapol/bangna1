@@ -1,0 +1,47 @@
+/* ตั้งค่าเอกสารขนาด A4 */
+.a4-document {
+    width: 210mm;
+    padding: 20mm;
+    margin: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.a5-document {
+    width: 148mm;
+    height: 210mm;
+    padding: 15mm;
+    margin: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.a5-document-landscape {
+    width: 210mm;
+    height: 148mm;
+    padding: 15mm;
+    margin: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.item-row {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.item-row h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.item-row p {
+    margin: 5px 0 0;
+    font-size: 1em;
+}

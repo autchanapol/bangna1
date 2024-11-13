@@ -65,13 +65,13 @@ const Header = ({ setIsAuthenticated }) => {
           <NavbarBrand href="/">
             <LogoWhite className=" d-lg-none" />
           </NavbarBrand>
-          <Button
+          {/* <Button
             color="primary"
             className=" d-lg-none"
             onClick={() => showMobilemenu()}
           >
             <i className="bi bi-list"></i>
-          </Button>
+          </Button> */}
         </div>
         <div className="hstack gap-2">
           <Button
