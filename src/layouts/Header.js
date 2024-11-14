@@ -19,7 +19,7 @@ import {
 } from "reactstrap";
 import Logo from "./Logo";
 import { ReactComponent as LogoWhite } from "../assets/images/logos/materialprowhite.svg";
-import user1 from "../assets/images/users/user4.jpg";
+import user1 from "../assets/images/users/user1.jpg";
 import { useNavigate } from "react-router-dom";
 
 const Header = ({ setIsAuthenticated }) => {
@@ -47,9 +47,19 @@ const Header = ({ setIsAuthenticated }) => {
   const handleLogout = () => {
     const confirmed = window.confirm("แน่ใจหรือไม่ว่าคุณต้องการออกจากระบบ?");
     if (confirmed) {
-      navigate("/logout"); // ถ้าผู้ใช้ยืนยัน จะทำการ logout
+      // ล้างข้อมูลการล็อกอินจาก localStorage
+      localStorage.removeItem("username");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("lastRoute");
+  
+      // ตั้งค่า isAuthenticated ให้เป็น false (ถ้ามีการใช้ใน App.js)
+      // setIsAuthenticated(false);
+  
+      // นำทางไปยังหน้า Login
+      navigate("/logout", { replace: true });
     }
   };
+  
 
   const handleMyAccout = () => {
     navigate("/myAccout");
@@ -123,7 +133,7 @@ const Header = ({ setIsAuthenticated }) => {
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Info</DropdownItem>
-              <DropdownItem onClick={handleMyAccout}>My Account</DropdownItem>
+              {/* <DropdownItem onClick={handleMyAccout}>My Account</DropdownItem> */}
               {/* <DropdownItem>Edit Profile</DropdownItem> */}
               <DropdownItem divider />
               {/* <DropdownItem>My Balance</DropdownItem>

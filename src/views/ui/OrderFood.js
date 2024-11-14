@@ -1,5 +1,6 @@
 import React, { useState, useRef, CSSProperties, useEffect } from "react";
 import jsPDF from "jspdf";
+import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import {
   Col,
@@ -58,6 +59,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // var DatePicker = require("reactstrap-date-picker");
 const OrderFood = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState("lg");
@@ -251,13 +253,6 @@ const OrderFood = () => {
       console.log("ยกเลิกการลบ");
     }
   };
-
-  const data = [
-    { id: 1, title: "รายการที่ 1", description: "รายละเอียดของรายการที่ 1" },
-    { id: 2, title: "รายการที่ 2", description: "รายละเอียดของรายการที่ 2" },
-    { id: 3, title: "รายการที่ 3", description: "รายละเอียดของรายการที่ 3" },
-    // เพิ่มรายการข้อมูลตามต้องการ
-  ];
 
   // confirmAlert({
   //   title: 'Confirm to delete',
@@ -463,10 +458,17 @@ const OrderFood = () => {
     }
   };
 
-
+  const data = [
+    { id: 1, title: "รายการที่ 1", description: "รายละเอียดของรายการที่ 1" },
+    { id: 2, title: "รายการที่ 2", description: "รายละเอียดของรายการที่ 2" },
+    { id: 3, title: "รายการที่ 3", description: "รายละเอียดของรายการที่ 3" },
+    // เพิ่มรายการข้อมูลตามต้องการ
+  ];
   const handleOpenReport = () => {
-    window.open('/report', '_blank', 'width=800,height=600');
-};
+    // window.open('/report', '_blank', 'width=800,height=600');
+    console.log("filteredData", JSON.stringify(filteredData));
+    navigate("/report", { state: { data: filteredData } }); // ส่ง array data ไปยังหน้า /report
+  };
 
   const handleSelectChange = (selectedOption, bedId) => {
     setBedActiveData((prevData) =>
@@ -537,11 +539,7 @@ const OrderFood = () => {
             </Button>
           </Col>
           <Col lg="auto">
-            <Button
-              className="btn "
-              color="primary"
-              onClick={handleOpenReport}
-            >
+            <Button className="btn " color="primary" onClick={handleOpenReport}>
               สร้างเอกสารสั่งอาหาร
             </Button>
           </Col>
@@ -743,7 +741,6 @@ const OrderFood = () => {
         </React.Fragment>
       </div>
 
-      
       {/* <div ref={printRef} className="a5-document-landscape">
         {data.map((item) => (
           <div key={item.id} className="item-row">

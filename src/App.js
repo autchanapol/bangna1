@@ -1,6 +1,7 @@
 import { useRoutes, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ThemeRoutes from "./routes/Router";
+import Header from "./layouts/Header"; // สมมติว่าคุณมีคอมโพเนนต์ Header
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,7 +38,13 @@ const App = () => {
 
   const routing = useRoutes(ThemeRoutes(isAuthenticated, setIsAuthenticated));
 
-  return <div>{routing}</div>;
+  return (
+    <div>
+      {/* ส่ง setIsAuthenticated ไปยัง Header */}
+      {/* <Header setIsAuthenticated={setIsAuthenticated} /> */}
+      {routing}
+    </div>
+  );
 };
 
 export default App;

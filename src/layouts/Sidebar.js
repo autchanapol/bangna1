@@ -1,15 +1,15 @@
 import { Button, Nav, NavItem } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
-import user1 from "../assets/images/users/user4.jpg";
+import user1 from "../assets/images/users/user1.jpg";
 import probg from "../assets/images/bg/download.jpg";
 import { React, useState, useEffect } from "react";
 console.log("probg",probg);
 const navigation = [
-  {
-    title: "Dashboard",
-    href: "/starter",
-    icon: "bi bi-speedometer2",
-  },
+  // {
+  //   title: "Dashboard",
+  //   href: "/starter",
+  //   icon: "bi bi-speedometer2",
+  // },
   // {
   //   title: "Alert",
   //   href: "/alerts",
