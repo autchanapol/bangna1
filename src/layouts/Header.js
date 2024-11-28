@@ -75,13 +75,6 @@ const Header = ({ setIsAuthenticated }) => {
           <NavbarBrand href="/">
             <LogoWhite className=" d-lg-none" />
           </NavbarBrand>
-          {/* <Button
-            color="primary"
-            className=" d-lg-none"
-            onClick={() => showMobilemenu()}
-          >
-            <i className="bi bi-list"></i>
-          </Button> */}
         </div>
         <div className="hstack gap-2">
           <Button
@@ -100,27 +93,7 @@ const Header = ({ setIsAuthenticated }) => {
 
         <Collapse navbar isOpen={isOpen}>
           <Nav className="me-auto" navbar>
-            {/* <NavItem>
-            <Link to="/starter" className="nav-link">
-              Starter
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link to="/about" className="nav-link">
-              About
-            </Link>
-          </NavItem> */}
-            {/* <UncontrolledDropdown inNavbar nav>
-            <DropdownToggle caret nav>
-              DD Menu
-            </DropdownToggle>
-            <DropdownMenu end>
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Reset</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown> */}
+
           </Nav>
           <Dropdown isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle color="transparent">

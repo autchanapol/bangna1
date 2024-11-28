@@ -3,6 +3,7 @@ import axios from "axios";
 // สร้าง instance ของ axios เพื่อกำหนดค่าพื้นฐาน
 const api = axios.create({
   baseURL: "https://localhost:44353/", // URL หลักของ API
+  // baseURL: "http://172.1.3.183/api/", // URL หลักของ API
   timeout: 5000, // กำหนดเวลาหมดอายุ request
   headers: {
     "Content-Type": "application/json",

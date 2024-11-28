@@ -4,6 +4,7 @@ import {createRoot} from 'react-dom/client';
 import "./assets/scss/style.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom"; // เปลี่ยนเป็น BrowserRouter
 import { HashRouter } from "react-router-dom";
 import Loader from "./layouts/loader/Loader";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,11 +14,14 @@ const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
 root.render(
+  <React.StrictMode>
   <Suspense fallback={<Loader />}>
-    <HashRouter>
+  <BrowserRouter>
       <App />
-    </HashRouter>
+    {/* </HashRouter> */}
+    </BrowserRouter>
   </Suspense>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
